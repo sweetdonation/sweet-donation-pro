@@ -12,9 +12,13 @@ export default function SignupPage(){
 
   async function handle(){
     setErr(null);
-    const { error } = await supabase.auth.signUp({
+    // Use magic-link/OTP instead of password signup
+    const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: window.location.origin + "/dashboard", data: { name, zip } }
+      options: {
+        emailRedirectTo: window.location.origin + "/dashboard",
+        data: { name, zip } // will be stored as user_metadata on first sign-in
+      }
     });
     if (error) setErr(error.message); else setSent(true);
   }
